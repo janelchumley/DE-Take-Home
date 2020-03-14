@@ -4,8 +4,8 @@ from pyspark.sql import SparkSession
 import json
 import os
 
-
 class JsonToParquet:
+    """Setting up global variables"""
     def __init__(self, json_dir, parquet_path):
         self.schema = StructType(
             [
@@ -17,27 +17,37 @@ class JsonToParquet:
         self.sc = SparkContext.getOrCreate()
         self.spark = SparkSession(self.sc)
         self.json_dir = json_dir
+        self.json_files = [f for f in os.listdir(self.json_dir) if f.endswith('.json')]
         self.parquet_path = parquet_path
         self.df = self.spark.createDataFrame([], self.schema)
-        self.file_names = [f for f in os.listdir(self.json_dir)]
 
+    """This is a custom method for importing a json file
+       with a given directory and file name."""
     def import_json(self, import_dir, file_name):
         with open(os.path.join(import_dir, file_name), "r") as f:
             file = json.loads(str(f.read()))
             return file
 
+    """ This method iterates through all of the json files in a given directory,
+        creates a dataframe containing those new records,
+        and appends the new records to the global dataframe 
+        using the Pyspark union operator/method."""
     def append_json_records(self):
-        for f in self.file_names:
+        for f in self.json_files:
             records_dict = self.import_json(self.json_dir, f)
             records = records_dict["records"]
             new_rows = self.spark.createDataFrame(records, self.schema)
             self.df = self.df.union(new_rows)
         return self.df
 
+    """This custom method calls the Spark dropDuplicates 
+        method on the global dataframe."""
     def dedup_records(self):
         self.df = self.df.dropDuplicates(["id", "ts"])
         return self.df
 
+    """After new records are added to the global dataframe and
+       duplicates are eliminated, the data is written to the parquet file."""
     def write_to_parquet(self):
         self.df.write.mode("overwrite").option("compression", "snappy").parquet(
             self.parquet_path
