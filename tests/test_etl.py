@@ -7,9 +7,8 @@ from pyspark.sql import SparkSession
 class TestJsonToParquet(TestCase):
     def setUp(self):
         self.json_dir = "tests/data"
-        self.parquet_dir = "tests/parquet_files"
         self.json_to_parquet = JsonToParquet(
-            json_dir=self.json_dir, parquet_dir=self.parquet_dir
+            json_dir=self.json_dir, parquet_path="tests/test.parquet"
         )
         self.schema = self.json_to_parquet.schema
         self.sc = self.json_to_parquet.sc
@@ -18,6 +17,7 @@ class TestJsonToParquet(TestCase):
         self.raw_df_array = [list(row) for row in self.raw_df.collect()]
         self.dedup_df = self.json_to_parquet.dedup_records()
         self.dedup_df_array = [list(row) for row in self.dedup_df.collect()]
+        self.json_to_parquet.write_to_parquet()
 
     def test_import_json(self):
         json_files_array = [f for f in os.listdir(self.json_dir)]
@@ -62,7 +62,7 @@ class TestJsonToParquet(TestCase):
         ], "Dedup dataframe output is incorrect."
 
     def test_write_to_parquet(self):
-        parquet_df = self.spark.read.parquet("tests/parquet_files")
+        parquet_df = self.spark.read.parquet("tests/test.parquet")
         parquet_df_array = sorted([list(row) for row in parquet_df.collect()])
         assert len(parquet_df_array) > 0, "There are no parquet files."
         assert (

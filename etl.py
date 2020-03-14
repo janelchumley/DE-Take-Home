@@ -6,7 +6,7 @@ import os
 
 
 class JsonToParquet:
-    def __init__(self, json_dir, parquet_dir):
+    def __init__(self, json_dir, parquet_path):
         self.schema = StructType(
             [
                 StructField("id", StringType(), True),
@@ -17,7 +17,7 @@ class JsonToParquet:
         self.sc = SparkContext.getOrCreate()
         self.spark = SparkSession(self.sc)
         self.json_dir = json_dir
-        self.parquet_dir = parquet_dir
+        self.parquet_path = parquet_path
         self.df = self.spark.createDataFrame([], self.schema)
         self.file_names = [f for f in os.listdir(self.json_dir)]
 
@@ -40,13 +40,13 @@ class JsonToParquet:
 
     def write_to_parquet(self):
         self.df.write.mode("overwrite").option("compression", "snappy").parquet(
-            self.parquet_dir
+            self.parquet_path
         )
 
 
 if __name__ == "__main__":
     json_to_parquet = JsonToParquet(
-        json_dir="./json_records", parquet_dir="parquet_files"
+        json_dir="./json_records", parquet_path='./records.parquet'
     )
     df_raw = json_to_parquet.append_json_records()
     df_dedup = json_to_parquet.dedup_records()
