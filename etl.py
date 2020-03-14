@@ -35,7 +35,7 @@ class JsonToParquet:
         return self.df
 
     def dedup_records(self):
-        self.df = self.df.dropDuplicates()
+        self.df = self.df.dropDuplicates(["id", "ts"])
         return self.df
 
     def write_to_parquet(self):
