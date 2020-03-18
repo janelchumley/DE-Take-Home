@@ -36,10 +36,10 @@ The solution should be high performant and should include unit tests.
 
 2. Create a virtual environment 
 
-    ```python3 -m venv navisenv```
+    ```python3 -m venv myvenv```
 3. Activate the virtual environment
 
-    ```source activate navisenv```
+    ```source activate myvenv```
     
 4. Install dependencies via pip 
 
