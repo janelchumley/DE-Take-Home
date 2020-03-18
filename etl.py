@@ -23,7 +23,7 @@ class JsonToParquet:
         self.parquet_path = parquet_path
         self.df = self.spark.createDataFrame([], self.schema)
 
-    """This is a custom method for importing a json file"""
+    """This method imports a json file from a given directory."""
 
     def import_json(self, import_dir, file_name):
         with open(os.path.join(import_dir, file_name), "r") as f:
@@ -31,7 +31,7 @@ class JsonToParquet:
             return file
 
     """ This method iterates through all of the json files in a given directory,
-        creates a dataframe containing those new records,
+        creates a new dataframe containing those new records,
         and appends the new records to the global dataframe 
         using the Pyspark union operator/method."""
 
@@ -43,7 +43,7 @@ class JsonToParquet:
             self.df = self.df.union(new_rows)
         return self.df
 
-    """This custom method calls the Spark dropDuplicates 
+    """This method calls the Spark dropDuplicates 
         method on the global dataframe."""
 
     def dedup_records(self):
@@ -53,6 +53,7 @@ class JsonToParquet:
     """After new records are added to the global dataframe and
        duplicates are eliminated, the data is written to the parquet file.
        The 'overwrite' mode parameter is used to avoid duplicates."""
+
     def write_to_parquet(self):
         self.df.write.mode("overwrite").option("compression", "snappy").parquet(
             self.parquet_path

@@ -30,4 +30,27 @@ Please build a ETL python program that will read all the json files in a filesys
 
 The solution should be high performant and should include unit tests.
 
-#### Solution 
+### Getting Started 
+1. Install Pyspark
+    * The following link provides a tutorial on setting up Pyspark locally: https://sharing.luminis.eu/blog/how-to-install-pyspark-and-apache-spark-on-macos/
+
+2. Create a virtual environment 
+
+    ```python3 -m venv navisenv```
+3. Activate the virtual environment
+
+    ```source activate navisenv```
+    
+4. Install dependencies via pip 
+
+    ```pip install -r requirements.txt```
+    
+5. Run etl.py
+
+    ```python etl.py```
+6. Run test_etl.py
+
+    ```python tests/test_etl.py```
+ 
+
+
