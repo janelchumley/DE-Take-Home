@@ -1,4 +1,4 @@
-### Navis Data Engineer Coding Assessment
+### Data Engineer Coding Assessment
 
 #### Problem statement 
 You have a list of records in json format like the following sample:
