@@ -50,7 +50,7 @@ The solution should be high performant and should include unit tests.
     ```python etl.py```
 6. Run test_etl.py
 
-    ```python tests/test_etl.py```
+    ```pytest tests/test_etl.py```
  
 
 
