@@ -39,7 +39,7 @@ The solution should be high performant and should include unit tests.
     ```python3 -m venv myvenv```
 3. Activate the virtual environment
 
-    ```source activate myvenv```
+    ```source myvenv/bin/activate```
     
 4. Install dependencies via pip 
 
