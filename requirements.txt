@@ -7,7 +7,7 @@ pluggy==0.13.1
 py==1.8.1
 py4j==0.10.7
 pyparsing==2.4.6
-pyspark==2.4.5
+pyspark==3.2.2
 pytest==5.4.1
 six==1.14.0
 wcwidth==0.1.8
